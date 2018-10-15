@@ -1,0 +1,19 @@
+- name: Copia la nuova applicazione agentDesktopMGR
+  copy:
+    src: files/agentdesktopmanager-1.13.war
+    dest: /home/
+    owner: root
+    group: root
+    mode: 0777
+
+- name: undeploy dell'applicazione {{ manager_presente_6520.stdout }}
+  shell: "/opt/glassfish/bin/asadmin undeploy {{ manager_presente_6520.stdout }}"
+  environment:
+        PATH: "{{ ansible_env.PATH }}:/usr/java/default/bin"
+
+- name: deploy agentdesktopmanager-1.13.war
+  shell: "/opt/glassfish/bin/asadmin deploy agentdesktopmanager-1.13.war"
+  args:
+    chdir: /home
+  environment:
+        PATH: "{{ ansible_env.PATH }}:/usr/java/default/bin"
