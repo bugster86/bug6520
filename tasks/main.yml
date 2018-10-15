@@ -8,55 +8,16 @@
   delegate_to: localhost
   changed_when: false
 
-# Setto una variabile spia sulla macchina ansible a false. Verrà controllata dopo il controllo su tutte le macchine per capire se esiste almeno un server con la versione minima necessaria per AgentDesktopMGR
-
-- name: Setto una variabile spia su server ansible
-  set_fact:
-        agentdesktopok: false
-  delegate_to: localhost
-  delegate_facts: true
-  run_once: true
+- name: Controlla se è un server su cui sta girando glassfish
+  shell: ps -ef | grep  java | grep glassfish 
   check_mode: false
-
-- name: Controllo se glassfish sta girando
-  shell: ps -ef | grep java | grep glassfish
-  check_mode: false
-  register: gf_running_6520
-  changed_when: false
   failed_when: false
-
-- name: Listo le applicazioni in glassfish
-  shell: asadmin --terse list-applications | grep agentdesktopmanager | cut -d "-" -f 2 | awk '{print $1}' | tr -d '.'
-  environment:
-      PATH: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin:/opt/glassfish/bin:/usr/java/default:/usr/java/default/bin"
   changed_when: false
+  register: glassfish_up_6520
+
+- name: Controlla se è deployato agentDesktopMGR
+  shell:   
+  check_mode: false
   failed_when: false
-  check_mode: false
-  when:
-  - gf_running_6520.stdout is defined 
-  - gf_running_6520.stdout != ""
-  register: lista_6520
-
-
-# Se trovo almeno un AgentdesktopMGR con un versione in grado di gestire il radio button, posso proseguire
-- set_fact:
-        agentdesktopok: true
-  delegate_to: localhost
-  delegate_facts: true
-  check_mode: false
-  when:
-  - gf_running_6520.stdout is defined
-  - lista_6520 is defined
-  - lista_6520.rc is defined
-  - gf_running_6520.stdout != ""
-  - lista_6520.stdout != ""
-  - lista_6520.stdout | int > 110 or lista_6520.stdout | int == 18 or lista_6520.stdout | int == 19
-
-- block:
-  - fail: msg="Ho fatto la scansione di tutti i server del sistema. Non ho trovato un AgentDesktopMGR che sia almeno alla versione 1.0.8"
-  - meta: end_play
-
-  when: hostvars['localhost']['agentdesktopok'] == false
-  run_once: true
-
-- ping: 
+  changed_when: false
+  
