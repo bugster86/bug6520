@@ -9,7 +9,7 @@
   changed_when: false
 
 - name: Controlla se è un server su cui sta girando glassfish
-  shell: ps -ef | grep  java | grep glassfish 
+  shell: ps -ef | grep  java | grep glassfish
   check_mode: false
   failed_when: false
   changed_when: false
@@ -18,7 +18,7 @@
 - name: Controlla se è deployato agentDesktopMGR
   shell: /opt/glassfish/bin/asadmin list-applications | grep agentdesktopmanager | awk '{print $1}'
   environment:
-        PATH: "{{ ansible_env.PATH }}:/usr/java/default/bin" 
+        PATH: "{{ ansible_env.PATH }}:/usr/java/default/bin"
   check_mode: false
   failed_when: false
   changed_when: false
@@ -30,5 +30,25 @@
   when:
   - glassfish_up_6520.rc == 0
   - manager_presente_6520.rc == 0
-  
-  
+
+- set_fact: ctldapws=false
+  delegate_to: localhost
+  delegate_facts: true
+  run_once: true
+
+- shell: pm2 list | grep CTLdapWS
+  check_mode: false
+  changed_when: false
+  become: true
+  become_user: reicom
+  register: search_ctldapws
+
+- set_fact: ctldapws=true
+  delegate_to: localhost
+  delegate_facts: true
+  when: search_ctldapws.rc == 0
+
+- block:
+  - fail: msg="In tutto il sistema  non ho trovato l'applicazione nodeJS CTLdapWS. Non posso proseguire"
+  - meta: end_play
+  when: hostvars['localhost']['ctldapws'] == false
