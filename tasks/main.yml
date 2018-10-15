@@ -16,8 +16,19 @@
   register: glassfish_up_6520
 
 - name: Controlla se è deployato agentDesktopMGR
-  shell:   
+  shell: /opt/glassfish/bin/asadmin list-applications | grep agentdesktopmanager | awk '{print $1}'
+  environment:
+        PATH: "{{ ansible_env.PATH }}:/usr/java/default/bin" 
   check_mode: false
   failed_when: false
   changed_when: false
+  when: glassfish_up_6520.rc == 0
+  register: manager_presente_6520
+
+- name: Aggiorna AgentDesktopMGR
+  include: aggiorna_agentdesktopmgr.yml
+  when:
+  - glassfish_up_6520.rc == 0
+  - manager_presente_6520.rc == 0
+  
   
