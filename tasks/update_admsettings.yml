@@ -6,5 +6,22 @@
     group: root
     mode: 0777
 
+- name: Copio il file javascript search_mongo_document.js
+  copy:
+    src: ../files/search_mongo_document.js
+    dest: /tmp/
+    owner: root
+    group: root
+    mode: 0777
+
+- name: Verifico se il documento mongoDB necessita di modifica
+   shell: mongo admanager /tmp/search_mongo_document.js
+   check_mode: false
+   failed_when: false
+   changed_when: false
+   register: documento_da_aggiornare
+
+
 - name: eseguo la modifica
   shell: mongo admanager /tmp/update_admsettings.js
+  when: '"CTWebService" in documento_da_aggiornare.stdout'
