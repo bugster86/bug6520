@@ -28,7 +28,7 @@
   when:
   - glassfish_up_6520.rc == 0
   - manager_presente_6520.rc == 0
-  - '"AgentDesktop" in manager_presente_6520.stdout'
+  - '"agentdesktop" in manager_presente_6520.stdout'
 
 # Controllo che almeno su un server sia presente l'applicazione CTLdapWS. Se non esiste non devo modificare
 # l'impostazione di AgentDesktopMGR
@@ -42,6 +42,8 @@
   failed_when: false
   become: true
   become_user: reicom
+  environment:
+        PATH: "/opt/reitek/ct6/bin:/opt/reitek/ct6/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/etc:/usr/bin/X11:/usr/local/bin:/usr/java/bin:/usr/local/kde/bin:/usr/java2/bin:/usr/ccs/bin:/usr/java/j2re1.4.2_08/bin:.:/home/reicom/.local/bin:/home/reicom/bin:/usr/local/sbin"
   register: search_ctldapws
 - set_fact: ctldapws=true
   delegate_to: localhost
@@ -62,8 +64,11 @@
 
 - name: Cerco sulle macchine qual è l'istanza mongo PRIMARY
   shell: "mongo --eval \"printjson(db.runCommand( { isMaster: 1 } ))\" | grep ismaster | grep true"
+  environment:
+        PATH: "/opt/reitek/ct6/bin:/opt/reitek/ct6/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/etc:/usr/bin/X11:/usr/local/bin:/usr/java/bin:/usr/local/kde/bin:/usr/java2/bin:/usr/ccs/bin:/usr/java/j2re1.4.2_08/bin:.:/home/reicom/.local/bin:/home/reicom/bin:/usr/local/sbin"
   check_mode: false
   changed_when: false
+  failed_when: false
   register: primarymongo
 
 - set_fact:
@@ -75,7 +80,7 @@
 - block:
   - fail: msg="Non ho trovato un'istanza PRIMARY di mongodb. Non posso procedere"
   - meta: end_play
-  when: mongop == "NN"
+  when: hostvars['localhost']['mongop'] == "NN"
   delegate_to: localhost
   run_once: true
 
