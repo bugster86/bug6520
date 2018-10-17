@@ -1,6 +1,6 @@
 - name: Copia la nuova applicazione agentDesktopMGR
   copy:
-    src: files/agentdesktopmanager-1.13.war
+    src: files/agentdesktopmanager-1.14.war
     dest: /home/
     owner: root
     group: root
@@ -11,8 +11,8 @@
   environment:
         PATH: "{{ ansible_env.PATH }}:/usr/java/default/bin"
 
-- name: deploy agentdesktopmanager-1.13.war
-  shell: "/opt/glassfish/bin/asadmin deploy --contextroot AgentDesktopMGR agentdesktopmanager-1.13.war"
+- name: deploy agentdesktopmanager-1.14.war
+  shell: "/opt/glassfish/bin/asadmin deploy --contextroot AgentDesktopMGR agentdesktopmanager-1.14.war"
   args:
     chdir: /home
   environment:
