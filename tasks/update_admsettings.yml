@@ -15,11 +15,11 @@
     mode: 0777
 
 - name: Verifico se il documento mongoDB necessita di modifica
-   shell: mongo admanager /tmp/search_mongo_document.js
-   check_mode: false
-   failed_when: false
-   changed_when: false
-   register: documento_da_aggiornare
+  shell: mongo admanager /tmp/search_mongo_document.js
+  check_mode: false
+  failed_when: false
+  changed_when: false
+  register: documento_da_aggiornare
 
 
 - name: eseguo la modifica
