@@ -7,4 +7,4 @@
     mode: 0777
 
 - name: eseguo la modifica
-  shell: mongo admanager update_admsettings.js
+  shell: mongo admanager /tmp/update_admsettings.js

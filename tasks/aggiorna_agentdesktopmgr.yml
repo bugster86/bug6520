@@ -12,7 +12,7 @@
         PATH: "{{ ansible_env.PATH }}:/usr/java/default/bin"
 
 - name: deploy agentdesktopmanager-1.13.war
-  shell: "/opt/glassfish/bin/asadmin deploy agentdesktopmanager-1.13.war"
+  shell: "/opt/glassfish/bin/asadmin deploy --contextroot AgentDesktopMGR agentdesktopmanager-1.13.war"
   args:
     chdir: /home
   environment:
