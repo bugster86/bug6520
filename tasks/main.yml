@@ -89,3 +89,6 @@
 - name: Modifico l'istanza primary di mongodb
   include: update_admsettings.yml
   when: inventory_hostname == hostvars['localhost']['mongop']
+
+- name: Trovo il server LDAP Master
+  include: trova_master.yml

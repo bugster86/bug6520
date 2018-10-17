@@ -1,0 +1,37 @@
+- name: esiste il file /etc/openldap/slapd.conf
+  stat: path=/etc/openldap/slapd.conf
+  register: ldap_conf_6520
+
+- name: LDAP è in esecuzione ?
+  shell: ps -ef | grep slapd | grep -v grep
+  register: ldap_active_6520
+  check_mode: false
+  failed_when: false
+  changed_when: false
+
+- name: Verifico se è uno slave
+  shell: grep syncrepl /etc/openldap/slapd.conf | grep -v "#"
+  register: is_replica_6520
+  check_mode: false
+  failed_when: false
+  changed_when: false
+
+- name: Verifico se è un mirror
+  shell: grep mirrormode  /etc/openldap/slapd.conf | grep -v "#"
+  register: is_mirror_6520
+  check_mode: false
+  failed_when: false
+  changed_when: false
+
+- name: Verifico se è un mirror1
+  shell: grep "serverID 1"  /etc/openldap/slapd.conf | grep -v "#"
+  register: is_mirror1_6520
+  check_mode: false
+  failed_when: false
+  changed_when: false
+
+- set_fact:
+   ldap_master: "{{ inventory_hostname }}"
+  delegate_to: localhost
+  delegate_facts: true
+  when: ldap_conf_6520.stat.exists and ldap_active_6520.rc == 0 and ( (is_mirror_6520.rc == 1 and is_replica_6520.rc ==1) or (is_mirror_6520.rc == 0 and is_mirror1_6520.rc == 0))
