@@ -1,0 +1,10 @@
+- name: Copio il file javascript update_admsettings.js sul server mongodb
+  copy:
+    src: ../files/update_admsettings.js
+    dest: /tmp/
+    owner: root
+    group: root
+    mode: 0777
+
+- name: eseguo la modifica
+  shell: mongo admanager update_admsettings.js

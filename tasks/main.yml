@@ -69,3 +69,15 @@
   delegate_to: localhost
   delegate_facts: true
   when: primarymongo.rc == 0
+
+- block:
+  - fail: msg="Non ho trovato un'istanza PRIMARY di mongodb. Non posso procedere"
+  - meta: end_play
+  when: mongop == "NN"
+  delegate_to: localhost
+  run_once: true
+
+
+- name: Modifico l'istanza primary di mongodb
+  include: update_admsettings.yml
+  when: inventory_hostname == hostvars['localhost']['mongop']
