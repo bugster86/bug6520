@@ -29,6 +29,7 @@
   - glassfish_up_6520.rc == 0
   - manager_presente_6520.rc == 0
   - '"agentdesktop" in manager_presente_6520.stdout'
+  - '"1.14" not in manager_presente_6520.stdout'
 
 # Controllo che almeno su un server sia presente l'applicazione CTLdapWS. Se non esiste non devo modificare
 # l'impostazione di AgentDesktopMGR
