@@ -28,6 +28,7 @@
   when:
   - glassfish_up_6520.rc == 0
   - manager_presente_6520.rc == 0
+  - '"AgentDesktop" in manager_presente_6520.stdout'
 
 # Controllo che almeno su un server sia presente l'applicazione CTLdapWS. Se non esiste non devo modificare
 # l'impostazione di AgentDesktopMGR
@@ -38,6 +39,7 @@
 - shell: pm2 list | grep CTLdapWS
   check_mode: false
   changed_when: false
+  failed_when: false
   become: true
   become_user: reicom
   register: search_ctldapws
@@ -59,7 +61,7 @@
   run_once: true
 
 - name: Cerco sulle macchine qual è l'istanza mongo PRIMARY
-  shell: mongo --eval "printjson(db.runCommand( { isMaster: 1 } ))" | grep ismaster | grep true
+  shell: "mongo --eval \"printjson(db.runCommand( { isMaster: 1 } ))\" | grep ismaster | grep true"
   check_mode: false
   changed_when: false
   register: primarymongo
