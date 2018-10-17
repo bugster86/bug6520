@@ -14,7 +14,6 @@
   failed_when: false
   changed_when: false
   register: glassfish_up_6520
-
 - name: Controlla se è deployato agentDesktopMGR
   shell: /opt/glassfish/bin/asadmin list-applications | grep agentdesktopmanager | awk '{print $1}'
   environment:
@@ -24,31 +23,49 @@
   changed_when: false
   when: glassfish_up_6520.rc == 0
   register: manager_presente_6520
-
 - name: Aggiorna AgentDesktopMGR
   include: aggiorna_agentdesktopmgr.yml
   when:
   - glassfish_up_6520.rc == 0
   - manager_presente_6520.rc == 0
 
+# Controllo che almeno su un server sia presente l'applicazione CTLdapWS. Se non esiste non devo modificare
+# l'impostazione di AgentDesktopMGR
 - set_fact: ctldapws=false
   delegate_to: localhost
   delegate_facts: true
   run_once: true
-
 - shell: pm2 list | grep CTLdapWS
   check_mode: false
   changed_when: false
   become: true
   become_user: reicom
   register: search_ctldapws
-
 - set_fact: ctldapws=true
   delegate_to: localhost
   delegate_facts: true
   when: search_ctldapws.rc == 0
-
 - block:
   - fail: msg="In tutto il sistema  non ho trovato l'applicazione nodeJS CTLdapWS. Non posso proseguire"
   - meta: end_play
   when: hostvars['localhost']['ctldapws'] == false
+
+# Eseguo la ricerca del mongodb PRIMARY (perchè la modifica la facciamo solo in quel punto)
+
+# Imposto inizialmente la macchina mongo primary a NN
+- set_fact: mongop="NN"
+  delegate_to: localhost
+  delegate_facts: true
+  run_once: true
+
+- name: Cerco sulle macchine qual è l'istanza mongo PRIMARY
+  shell: mongo --eval "printjson(db.runCommand( { isMaster: 1 } ))" | grep ismaster | grep true
+  check_mode: false
+  changed_when: false
+  register: primarymongo
+
+- set_fact:
+    mongop: "{{ inventory_hostname }}"
+  delegate_to: localhost
+  delegate_facts: true
+  when: primarymongo.rc == 0
