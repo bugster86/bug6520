@@ -1,1 +1,1 @@
-db.admsettings.update( {} , {$set: { CTWebService : "CTLdapWS" } } )
+db.admsettings.update( { CTWebService : "CTManagerWS" } , {$set: { CTWebService : "CTLdapWS" } } )
