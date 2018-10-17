@@ -1,7 +1,7 @@
-Nome Ruolo
+Descrizione
 =========
 
-La procedura automatica dovrà 
+La procedura automatica dovrà
 - Impostare il parametro che indica la modalità di accesso ad LDAP a "CTLdapWS"
 - Aggiornare preventivamente AgentDesktopMGR ad una versione in grado di
 modificare tale parametro.
