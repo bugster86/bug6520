@@ -5,11 +5,11 @@ canAddResources: Yes
 canAddSatellites: Yes
 canAddUserApplications: Yes
 canExecute: -
-cn: {{ utente }}
+cn: {{ item }}
 executeAccessLevel: System
 executeAccessLevel: WebPortal-Admin
 executeAccessLevel: WebPortal-Supervisor
-givenName: {{ utente }}
+givenName: {{ item }}
 groupAffiliation: System
 groupAffiliation: WebPortal
 groupAffiliation: WebPortal-Admin
@@ -20,10 +20,10 @@ readAccessLevel: System
 readAccessLevel: WebPortal
 readAccessLevel: WebPortal-Admin
 readAccessLevel: WebPortal-Supervisor
-sn: {{ utente }}
-userPassword: {{ utente }}
+sn: {{ item }}
+userPassword: {{ item }}
 writeAccessLevel: System
 writeAccessLevel: WebPortal-Admin
-x2xDevice: {{ utente }}
+x2xDevice: {{ item }}
 x2xDomain: acd.{{ rootdom_6520.stdout }}.{{ roottld_6520.stdout }}
 x2xTenant: all

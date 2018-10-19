@@ -1,11 +1,8 @@
 - name: "Controllo che l'utente {{ item }} sia presente"
-  ldap_entry:
-    bind_dn: "{{ rootdn_6520.stdout }}"
-    bind_pw: "{{ rootpw_6520.stdout }}"
-    server_uri: ldap://localhost/
-    state: present
-    dn: "cn={{ item }},ou=people,ou=all,ou=x2x,dc={{ rootdom_6520.stdout }},dc={{ roottld_6520 }}"
-    objectClass: x2xPerson
+  shell: ldapsearch -D "{{ rootdn_6520.stdout }}" -w "{{ rootpw_6520.stdout }}" -h localhost -p 389 -b "{{ item }},ou=people,ou=all,ou=x2x,dc={{ rootdom_6520.stdout }},dc={{ roottld_6520.stdout }}"
+  check_mode: false
+  failed_when: false
+  changed_when: false
   register: utente_presente
 
 - block:
@@ -19,4 +16,4 @@
 
   - name: Aggiungo l'utente mancante
     shell: ldapadd -D "{{ rootdn_6520.stdout }}" -x -w "{{ rootpw_6520.stdout }}" -f /tmp/nuovoutente.ldif
-  when: utente_presente id failed
+  when: utente_presente.rc != 0
