@@ -1,5 +1,5 @@
 - name: "Controllo che l'utente {{ item }} sia presente"
-  shell: ldapsearch -D "{{ rootdn_6520.stdout }}" -w "{{ rootpw_6520.stdout }}" -h localhost -p 389 -b "{{ item }},ou=people,ou=all,ou=x2x,dc={{ rootdom_6520.stdout }},dc={{ roottld_6520.stdout }}"
+  shell: ldapsearch -D "{{ rootdn_6520.stdout }}" -w "{{ rootpw_6520.stdout }}" -h localhost -p 389 -b "cn={{ item }},ou=people,ou=all,ou=x2x,dc={{ rootdom_6520.stdout }},dc={{ roottld_6520.stdout }}"
   check_mode: false
   failed_when: false
   changed_when: false
