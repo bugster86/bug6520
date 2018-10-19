@@ -1,0 +1,29 @@
+dn: cn={{ item }},ou=people,ou=all,ou=x2x,dc={{ rootdom_6520.stdout }},dc={{ roottld_6520.stdout }}
+canAddApplications: Yes
+canAddPeople: Yes
+canAddResources: Yes
+canAddSatellites: Yes
+canAddUserApplications: Yes
+canExecute: -
+cn: {{ utente }}
+executeAccessLevel: System
+executeAccessLevel: WebPortal-Admin
+executeAccessLevel: WebPortal-Supervisor
+givenName: {{ utente }}
+groupAffiliation: System
+groupAffiliation: WebPortal
+groupAffiliation: WebPortal-Admin
+groupAffiliation: WebPortal-Supervisor
+objectClass: x2xPerson
+readAccessLevel: Management
+readAccessLevel: System
+readAccessLevel: WebPortal
+readAccessLevel: WebPortal-Admin
+readAccessLevel: WebPortal-Supervisor
+sn: {{ utente }}
+userPassword: {{ utente }}
+writeAccessLevel: System
+writeAccessLevel: WebPortal-Admin
+x2xDevice: {{ utente }}
+x2xDomain: acd.{{ rootdom_6520.stdout }}.{{ roottld_6520.stdout }}
+x2xTenant: all

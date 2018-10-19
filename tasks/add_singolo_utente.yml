@@ -1,0 +1,19 @@
+- name: "Controllo che l'utente {{ item }} sia presente"
+  ldap_entry:
+    state: present
+    dn: "cn={{ item }},ou=people,ou=all,ou=x2x,dc={{ rootdom_6520.stdout }},dc={{ roottld_6520 }}"
+    objectClass: x2xPerson
+  register: utente_presente
+
+- block:
+  - name: valorizzo il template dell'utente
+    template:
+      src: ../templates/utente_ldap.j2
+      dest: /tmp/nuovoutente.ldif
+      owner: root
+      group: root
+      mode: 0777
+
+  - name: Aggiungo l'utente mancante
+    shell: ldapadd -D "{{ rootdn_6520.stdout }}" -x -w "{{ rootpw_6520.stdout }}" -f /tmp/nuovoutente.ldif
+  when: utente_presente id failed

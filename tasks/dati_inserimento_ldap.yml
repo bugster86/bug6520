@@ -1,0 +1,27 @@
+- name: Estraggo il rootdn
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  shell: grep rootdn /etc/openldap/slapd.conf | grep Superuser | cut -d "\"" -f 2 | grep -v "#"
+  register: rootdn_6520
+
+- name: Estraggo il rootpw
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  shell: grep rootpw /etc/openldap/slapd.conf | grep -v "#" | awk '{print $2}'
+  register: rootpw_6520
+
+- name: Estraggo il domain
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  shell:  grep suffix /etc/openldap/slapd.conf | grep -v "#" | grep -v accesslog | cut -d "," -f 1 | cut -d "=" -f 2
+  register: rootdom_6520
+
+- name: Estratto il tld
+  changed_when: false
+  failed_when: false
+  check_mode: false
+  shell: grep suffix /etc/openldap/slapd.conf | grep -v "#" | grep -v accesslog | cut -d "," -f 2 | cut -d "=" -f 2 | rev | cut -c 2- | rev
+  register: roottld_6520

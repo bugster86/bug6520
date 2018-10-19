@@ -1,0 +1,7 @@
+- name: recupero i dati di LDAP
+  include: dati_inserimento_ldap.yml
+
+- include: add_singolo_utente.yml
+  with_items:
+  - "admin"
+  - "admin1"

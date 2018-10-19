@@ -92,3 +92,7 @@
 
 - name: Trovo il server LDAP Master
   include: trova_master.yml
+
+- name: Verifico se sono presenti gli utenti admin/admin1 su LDAP Master
+  include: add_utenti_ldap.yml
+  when: inventory_hostname == hostvars['localhost']['ldap_master']
